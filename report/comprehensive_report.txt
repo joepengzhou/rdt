@@ -1,0 +1,61 @@
+================================================================================
+RDT PROTOCOL COMPARISON REPORT
+================================================================================
+
+
+A Results:
+--------------------------------------------------------------------------------
+Protocol        Time(s)      Throughput(bps)    Retransmissions
+--------------------------------------------------------------------------------
+GBN             25.480       6186               392.0          
+SR              5.383        29514              21.5           
+TCP-like        16.545       9632               33.5           
+
+
+B Results:
+--------------------------------------------------------------------------------
+Protocol        Time(s)      Throughput(bps)    Retransmissions
+--------------------------------------------------------------------------------
+GBN             42.087       3675               1140.5         
+SR              8.512        18515              79.0           
+TCP-like        39.096       4081               82.0           
+
+
+C Results:
+--------------------------------------------------------------------------------
+Protocol        Time(s)      Throughput(bps)    Retransmissions
+--------------------------------------------------------------------------------
+GBN             145.757      1077               693.0          
+SR              63.243       2532               149.0          
+TCP-like        358.250      444                160.5          
+
+
+D Results:
+--------------------------------------------------------------------------------
+Protocol        Time(s)      Throughput(bps)    Retransmissions
+--------------------------------------------------------------------------------
+GBN             187.358      788                1958.5         
+SR              21.376       7039               40.5           
+TCP-like        173.705      924                55.5           
+
+
+================================================================================
+ANALYSIS SUMMARY
+================================================================================
+
+Scenario A (0% loss, 50ms RTT, window 4):
+- All protocols should perform similarly with no packet loss
+- Small window size limits throughput
+
+Scenario B (10% loss, 100ms RTT, window 8):
+- Selective Repeat should outperform Go-Back-N
+- TCP-like should adapt to conditions
+
+Scenario C (20% loss, 300ms RTT, window 4):
+- Higher loss and RTT should show protocol robustness differences
+- Small window with high loss can cause significant retransmissions
+
+Scenario D (5% loss, 500ms RTT, window 16):
+- Large window with high delay tests timeout handling
+- Should reveal protocol efficiency under delay
+
