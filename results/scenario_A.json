@@ -1,0 +1,62 @@
+{
+  "GBN": {
+    "avg_elapsed": 27.890857100486755,
+    "avg_throughput": 5704.883907536698,
+    "avg_bytes_received": 19600.0,
+    "avg_retransmissions": 427.5,
+    "all_runs": [
+      {
+        "elapsed": 31.254413843154907,
+        "throughput": 5016.891399303625,
+        "bytes_received": 19600,
+        "retransmissions": 487
+      },
+      {
+        "elapsed": 24.527300357818604,
+        "throughput": 6392.876415769771,
+        "bytes_received": 19600,
+        "retransmissions": 368
+      }
+    ]
+  },
+  "SR": {
+    "avg_elapsed": 6.5763736963272095,
+    "avg_throughput": 24008.292017828622,
+    "avg_bytes_received": 19700.0,
+    "avg_retransmissions": 26.5,
+    "all_runs": [
+      {
+        "elapsed": 6.3119120597839355,
+        "throughput": 25095.406669119882,
+        "bytes_received": 19800,
+        "retransmissions": 22
+      },
+      {
+        "elapsed": 6.840835332870483,
+        "throughput": 22921.177366537362,
+        "bytes_received": 19600,
+        "retransmissions": 31
+      }
+    ]
+  },
+  "TCP-like": {
+    "avg_elapsed": 15.787949204444885,
+    "avg_throughput": 10098.716535264126,
+    "avg_bytes_received": 19900.0,
+    "avg_retransmissions": 29.5,
+    "all_runs": [
+      {
+        "elapsed": 15.177935123443604,
+        "throughput": 10488.910296770353,
+        "bytes_received": 19900,
+        "retransmissions": 25
+      },
+      {
+        "elapsed": 16.397963285446167,
+        "throughput": 9708.522773757899,
+        "bytes_received": 19900,
+        "retransmissions": 34
+      }
+    ]
+  }
+}
