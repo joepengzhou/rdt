@@ -73,7 +73,7 @@ GBN采用滑动窗口机制，使用累计确认和超时重传策略。其核�
 ```
 python3 experiment.py --scenario A --bytes 20000 --runs 2
 ```
-## 结果分析与讨论
+## 实验结果
 ### Scenarios A
 | Protocol | Time (s) | Throughput (bps) | Retransmissions |
 |----------|----------|------------------|-----------------|
@@ -108,7 +108,7 @@ python3 experiment.py --scenario A --bytes 20000 --runs 2
 
 ![D](/plots/scenario_D.png)
 
-## 结论与限制
+## 结果分析与讨论
 
 Scenario A (0% loss, 50ms RTT, window 4):
 - All protocols should perform similarly with no packet loss
@@ -141,5 +141,8 @@ Scenario D (5% loss, 500ms RTT, window 16):
 场景D(5%损耗，500ms RTT，窗口16)：
 - 具有高延迟测试超时处理的大窗口
 - 应该显示延迟下的协议效率
+
+## 结论与限制
+
 
 ## 参考文献（IEEE/ACM格式）
