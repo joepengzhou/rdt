@@ -7,142 +7,171 @@
 ## 专案简介与动机
 
 ### 简介
+
 项目实现了一个完整的可靠数据传输（Reliable Data Transfer, RDT）协议测试框架，包含三种经典协议（Go-Back-N、Selective Repeat、TCP-like）的完整实现和性能比较系统
 
 ### 动机
-计算机网络领域，可靠数据传输至关重要。不同的RDT协议在性能、实现机理等方面存在明显差异。当前项目目的则为实现：
-- 实现机理​：清晰展示GBN、SR和TCP-like协议的工作原理
-- ​性能测试​：在不同网络条件下定量比较各协议表现
+
+计算机网络领域，可靠数据传输至关重要。不同的 RDT 协议在性能、实现机理等方面存在明显差异。当前项目目的则为实现：
+
+- 实现机理 ​：清晰展示 GBN、SR 和 TCP-like 协议的工作原理
+- ​ 性能测试 ​：在不同网络条件下定量比较各协议表现
 
 ## 协议设计
+
 ### Go-Back-N
+
 - 原理  
-GBN采用滑动窗口机制，使用累计确认和超时重传策略。其核心思想是"回退N步"，即当某个包丢失时，重传该包及其后续所有已发送但未确认的包
+  GBN 采用滑动窗口机制，使用累计确认和超时重传策略。其核心思想是"回退 N 步"，即当某个包丢失时，重传该包及其后续所有已发送但未确认的包
 
 - 流程图
-![gbn](/resource/gbn.png)
+  ![gbn](/resource/gbn.png)
+
 ### Selective Repeat
+
 - 原理  
-    SR协议采用选择性重传机制
-    - 每个数据包独立确认和重传
-    - 接收方缓存乱序到达的包
-    - 每个分组有独立定时器 
+   SR 协议采用选择性重传机制
+  - 每个数据包独立确认和重传
+  - 接收方缓存乱序到达的包
+  - 每个分组有独立定时器
 - 流程图
-![sr](/resource/sr.png)
+  ![sr](/resource/sr.png)
 
 ### TCP-like
-- 原理  
-    基于TCP核心机制，在 SR 基础上增加 TCP 的三个特性：
-    - RTT 动态估计与自适应超时；
-    - 三次重复 ACK 触发快速重传；
-    - 可选的简单拥塞窗口（cwnd）控制
 
-- 算法  
-    - EstimatedRTT = (1−α)EstimatedRTT + α×SampleRTT  
-    - DevRTT = (1−β)DevRTT + β×∣SampleRTT − EstimatedRTT∣  
-    - RTO = EstimatedRTT + 4×DevRTT  
+- 原理  
+   基于 TCP 核心机制，在 SR 基础上增加 TCP 的三个特性：
+
+  - RTT 动态估计与自适应超时；
+  - 三次重复 ACK 触发快速重传；
+  - 可选的简单拥塞窗口（cwnd）控制
+
+- 算法
+
+  - EstimatedRTT = (1−α)EstimatedRTT + α×SampleRTT
+  - DevRTT = (1−β)DevRTT + β×∣SampleRTT − EstimatedRTT∣
+  - RTO = EstimatedRTT + 4×DevRTT  
     α = 0.125, β = 0.25
 
 - 流程图
-![tcp-like](/resource/tcp-like.png)
+  ![tcp-like](/resource/tcp-like.png)
+
+  ![tcp-like](/resource/tcp-like2.png)
 
 ## 实验环境与参数
+
 ### 架构设计
+
 - 开发语言：python
 - 开发工具：vscode
 - 运行环境：ubuntu 22.04 虚拟机运行
 - 硬件配置：
-    - CPU 2核 2.8GB
-    - 内存 4GB
 
-- ​底层​：UnreliableChannel - 网络信道模拟
-- ​中间层​：协议实现（GBN、SR、TCP-like）
-- ​上层​：实验框架 - 场景管理和性能分析
+  - CPU 2 核 2.8GB
+  - 内存 4GB
+
+- ​ 底层 ​：UnreliableChannel - 网络信道模拟
+- ​ 中间层 ​：协议实现（GBN、SR、TCP-like）
+- ​ 上层 ​：实验框架 - 场景管理和性能分析
 
 ### 实验参数
-| 测试情境 | 封包丢失率 | RTT（ms） | 视窗大小 |
-| ------- | ------- | ------- | ------- |
-| A | 0% | 50 | 4 |
-| B | 10% | 100 | 8 |
-| C | 20% | 300 | 4 |
-| D | 30% | 500 | 16 |
 
+| 测试情境 | 封包丢失率 | RTT（ms） | 视窗大小 |
+| -------- | ---------- | --------- | -------- |
+| A        | 0%         | 50        | 4        |
+| B        | 10%        | 100       | 8        |
+| C        | 20%        | 300       | 4        |
+| D        | 30%        | 500       | 16       |
 
 ### 命令示例
 
 ```
 python3 experiment.py --scenario A --bytes 20000 --runs 2
 ```
+
 ## 实验结果
+
 ### Scenarios A
+
 | Protocol | Time (s) | Throughput (bps) | Retransmissions |
-|----------|----------|------------------|-----------------|
+| -------- | -------- | ---------------- | --------------- |
 | GBN      | 29.536   | 5352             | 459.0           |
 | SR       | 5.979    | 26329            | 24.5            |
 | TCP-like | 14.811   | 10809            | 29.0            |
 
 ![A](/plots/scenario_A.png)
+
 ### Scenarios B
+
 | Protocol | Time(s) | Throughput(bps) | Retransmissions |
-|----------|---------|----------------|-----------------|
-| GBN      | 43.536  | 3539           | 1192.5          |
-| SR       | 9.498   | 16885          | 77.5            |
-| TCP-like | 49.382  | 3346           | 92.5            |
+| -------- | ------- | --------------- | --------------- |
+| GBN      | 43.536  | 3539            | 1192.5          |
+| SR       | 9.498   | 16885           | 77.5            |
+| TCP-like | 49.382  | 3346            | 92.5            |
 
 ![B](/plots/scenario_B.png)
+
 ### Scenarios C
+
 | Protocol | Time(s) | Throughput(bps) | Retransmissions |
-|----------|---------|----------------|-----------------|
-| GBN      | 143.258  | 1096          | 672.5           |
-| SR       | 65.644   | 2402          | 156.0           |
-| TCP-like | 247.898  | 687           | 162.0           |
+| -------- | ------- | --------------- | --------------- |
+| GBN      | 143.258 | 1096            | 672.5           |
+| SR       | 65.644  | 2402            | 156.0           |
+| TCP-like | 247.898 | 687             | 162.0           |
 
 ![C](/plots/scenario_C.png)
 
 ### Scenarios D
+
 | Protocol | Time(s) | Throughput(bps) | Retransmissions |
-|----------|---------|----------------|-----------------|
-| GBN      | 193.882 | 761            | 2046.0          |
-| SR       | 23.989   | 6390          | 51.0            |
-| TCP-like | 170.157  | 944           | 57.5            |
+| -------- | ------- | --------------- | --------------- |
+| GBN      | 193.882 | 761             | 2046.0          |
+| SR       | 23.989  | 6390            | 51.0            |
+| TCP-like | 170.157 | 944             | 57.5            |
 
 ![D](/plots/scenario_D.png)
 
 ## 结果分析与讨论
 
-Scenario A (0% loss, 50ms RTT, window 4):
-- All protocols should perform similarly with no packet loss
-- Small window size limits throughput  
+场景 A(0%损耗，50ms RTT，窗口 4)：
 
-场景A(0%损耗，50ms RTT，窗口4)：
-- 所有协议的性能应该相似，没有丢包
-- 小窗口大小限制吞吐量
+- 预期表现：在网络环境比较理想，无丢包、低延迟的情况下，所有协议的性能应该相似，基本都能稳定传输
+- 实际表现：SR 协议的表现明显比 GBN 和 TCP-Like 要好，在吞吐量、耗时、重传 3 个指标上都是最好的。不过，虽然环境比较理想，但 GBN 和 TCP-Like 协议还是有一些重传。特别是 GBN 重传达到 427 次，约是其它两种协议的 150 倍。SR 的独立计时器机制效率更高些。
+- 差异分析：GBN“回退 N 步”的整个窗口重传策略与 TCP-Like 的累计确认和超时策略可能 导致不必要的重传
 
-Scenario B (10% loss, 100ms RTT, window 8):
-- Selective Repeat should outperform Go-Back-N
-- TCP-like should adapt to conditions
+场景 B(10%损耗，100ms RTT，窗口 8)：
 
-场景B(10%损耗，100ms RTT，窗口8)：
-- 选择性重复应该优于Go-Back-N
-- 类tcp应该适应条件
+- 预期表现：选择性重传应该优于 Go-Back-N，SR 对每个数据包独立确认和重传，效率较高；GBN 还是会重传全部窗口，TCP-Like 会适应条件，但调整较慢。
+- 实际表现：和预期基本相符，SR 吞吐量比场景 A 要高很多，但 TCP-Like 的效能比预期要差些。
+- 差异分析：估计和 ROT 估算在当前环境下在快速响应上比较弱。这种估算属于一种长期稳定评估，在较短时间内，副作用可能比较大
 
-Scenario C (20% loss, 300ms RTT, window 4):
-- Higher loss and RTT should show protocol robustness differences
-- Small window with high loss can cause significant retransmissions
+场景 C(20%损耗，300ms RTT，窗口 4)：
 
-场景C(20%损耗，300ms RTT，窗口4)：
-- 更高的损耗和RTT应该显示协议鲁棒性差异
-- 高损耗的小窗口可能导致大量重传
+- 预期表现：TCP 的拥塞控制可以改善效能。这个场景是丢包率最高的，同时 RTT 延迟也处于中等偏上的水平，这时 TCP-Like 的快速重传和拥塞控制应该可以发挥作用，GBN 还是因为重传整个窗口将导致较低的效率。
+- 实际表现：SR 协议的表现仍然最好。但 TCP-Like 的吞吐量和耗时都是最差的。估计是 RTT 估算偏差导致传输速度下降得比较多。
+- 差异分析：TCP-like 在检测到丢包后可能进入拥塞避免阶段，降低发送速率，导致整体性能下降。SR 的独立计时器与选择性重传对于恶劣环境好像适应性更强。
 
-Scenario D (5% loss, 500ms RTT, window 16):
-- Large window with high delay tests timeout handling
-- Should reveal protocol efficiency under delay
+场景 D(5%损耗，500ms RTT，窗口 16)：
 
-场景D(5%损耗，500ms RTT，窗口16)：
-- 具有高延迟测试超时处理的大窗口
-- 应该显示延迟下的协议效率
+- 预期表现：测试协议对高延迟的适应能力。在高延迟、大窗口的环境中，GBN 和 SR 在超时重传方面会损耗较多。TCP-Like 会动态调整，更精确地控制传输。
+- 实现表现：SR 相对 GBN 和 TCP-Like 来说还是明显要好很多，在吞吐量、耗时、重传方面是碾压式的。TCP-Like 仍然表现不佳，尽管协议复杂度高，但重传代价较大。
+- 差异分析：GBN 在高 RTT 大窗口下发生丢包，需等较长的超时再重传。
 
 ## 结论与限制
 
+从实际测试的情况看，GBN 的表现符合预期，属于正常范围，它的“回退 N 步”重传整个窗口的策略导致重传代价很大，同时也很难应对高丢包、高时延、大窗口的网络环境。
 
-## 参考文献（IEEE/ACM格式）
+意外的是两个：
+
+一个是 TCP-Like 协议的表现比预期要差很多，只在场景 A 和 D 中耗时比 GBN 少，特别是在场景 C 中耗时比 GBN 多近 1 倍，吞吐量也明显较低，虽然它的重传次数要明显少于 GBN。
+
+另一个是 SR 协议的效能是出奇的好。在 A\B\C\D4 个场景中，远胜于 GBN 和 TCP-Like。
+
+上述情况的主要原因可能有：
+
+- TCP-Like 的拥塞控制和 RTT 的估算方式在短时间内反应较慢，无法体现其机制；
+- SR 协议的独立定时器和每个数据包的独立确认和重传机制比较简单高效，在样本场景中，在较短时间内效能方面比复杂的 TCP-Like 更易体现优势。
+
+从实验环境看，在模拟真实环境、参数调整等方面还有一些改进空间，比如初始窗口大小，发送数据量等方面，另外可以设定更多的参数组合来进行全面的测试。
+
+## 参考文献（IEEE/ACM 格式）

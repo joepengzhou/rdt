@@ -1,61 +1,43 @@
 {
   "GBN": {
-    "avg_elapsed": 43.5356639623642,
-    "avg_throughput": 3538.7669969877634,
-    "avg_bytes_received": 19250.0,
-    "avg_retransmissions": 1192.5,
+    "avg_elapsed": 43.36724233627319,
+    "avg_throughput": 3541.8438370826734,
+    "avg_bytes_received": 19200.0,
+    "avg_retransmissions": 1089.0,
     "all_runs": [
       {
-        "elapsed": 42.712992906570435,
-        "throughput": 3614.8251268116833,
-        "bytes_received": 19300,
-        "retransmissions": 1146
-      },
-      {
-        "elapsed": 44.35833501815796,
-        "throughput": 3462.7088671638435,
+        "elapsed": 43.36724233627319,
+        "throughput": 3541.8438370826734,
         "bytes_received": 19200,
-        "retransmissions": 1239
+        "retransmissions": 1089
       }
     ]
   },
   "SR": {
-    "avg_elapsed": 9.498427748680115,
-    "avg_throughput": 16885.07047127628,
-    "avg_bytes_received": 19900.0,
-    "avg_retransmissions": 77.5,
+    "avg_elapsed": 8.209264755249023,
+    "avg_throughput": 19295.272441873512,
+    "avg_bytes_received": 19800.0,
+    "avg_retransmissions": 81.0,
     "all_runs": [
       {
-        "elapsed": 10.313720703125,
-        "throughput": 15435.748609302877,
-        "bytes_received": 19900,
-        "retransmissions": 79
-      },
-      {
-        "elapsed": 8.68313479423523,
-        "throughput": 18334.39233324969,
-        "bytes_received": 19900,
-        "retransmissions": 76
+        "elapsed": 8.209264755249023,
+        "throughput": 19295.272441873512,
+        "bytes_received": 19800,
+        "retransmissions": 81
       }
     ]
   },
   "TCP-like": {
-    "avg_elapsed": 49.381603717803955,
-    "avg_throughput": 3346.3712049975484,
+    "avg_elapsed": 54.17384147644043,
+    "avg_throughput": 2938.687670307342,
     "avg_bytes_received": 19900.0,
-    "avg_retransmissions": 92.5,
+    "avg_retransmissions": 84.0,
     "all_runs": [
       {
-        "elapsed": 39.93352127075195,
-        "throughput": 3986.625645171968,
+        "elapsed": 54.17384147644043,
+        "throughput": 2938.687670307342,
         "bytes_received": 19900,
         "retransmissions": 84
-      },
-      {
-        "elapsed": 58.82968616485596,
-        "throughput": 2706.116764823129,
-        "bytes_received": 19900,
-        "retransmissions": 101
       }
     ]
   }
